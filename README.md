@@ -9,3 +9,7 @@ https://en.wikipedia.org/wiki/Funan
 It has nothing todo with above description :)
 
 It's my side project to learn Clojurescript + React Native.
+
+# Pre-requisite
+
+See https://github.com/drapanjanas/re-natal#dependencies
