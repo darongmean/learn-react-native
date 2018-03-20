@@ -19,14 +19,14 @@
   :profiles {:dev      {:dependencies [[figwheel-sidecar "0.5.14"]
                                        [com.cemerick/piggieback "0.2.1"]]
                         :source-paths ["src" "env/dev"]
-                        :cljsbuild    {:builds [
-                                                {:id           "ios"
+                        :cljsbuild    {:builds [{:id           "ios"
                                                  :source-paths ["src" "env/dev"]
                                                  :figwheel     true
                                                  :compiler     {:output-to     "target/ios/not-used.js"
                                                                 :main          "env.ios.main"
                                                                 :output-dir    "target/ios"
-                                                                :optimizations :none}}
+                                                                :optimizations :none
+                                                                :target        :nodejs}}
                                                 {:id           "android"
                                                  :source-paths ["src" "env/dev"]
                                                  :figwheel     true
@@ -36,8 +36,7 @@
                                                                 :optimizations :none}}
                                                 #_($DEV_PROFILES$)]}
                         :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}
-             :prod     {:cljsbuild {:builds [
-                                             {:id           "ios"
+             :prod     {:cljsbuild {:builds [{:id           "ios"
                                               :source-paths ["src" "env/prod"]
                                               :compiler     {:output-to          "index.ios.js"
                                                              :main               "env.ios.main"
@@ -57,8 +56,7 @@
                                                              :closure-defines    {"goog.DEBUG" false}}}
                                              #_($PROD_PROFILES$)]}}
              :advanced {:dependencies [[react-native-externs "0.1.0"]]
-                        :cljsbuild    {:builds [
-                                                {:id           "ios"
+                        :cljsbuild    {:builds [{:id           "ios"
                                                  :source-paths ["src" "env/prod"]
                                                  :compiler     {:output-to          "index.ios.js"
                                                                 :main               "env.ios.main"
