@@ -23,15 +23,24 @@
 
 (defonce app-state (atom {:greeting "Hello Clojure in iOS and Android!"}))
 
+(def RNMasonry (js/require "react-native-masonry"))
+(def RNFastImage (js/require "react-native-fast-image"))
+
+(def masonry (partial create-element (.-default RNMasonry)))
+(def fast-image (partial create-element (.-default RNFastImage)))
+
 (defc AppRoot < rum/reactive [state]
-  (view {:style {:flexDirection "column" :margin 40 :alignItems "center"}}
-        (text {:style {:fontSize 30 :fontWeight "100" :marginBottom 20 :textAlign "center"}}
-              (:greeting (rum/react state)))
-        (image {:source logo-img
-                :style  {:width 80 :height 80 :marginBottom 30}})
-        (touchable-highlight {:style   {:backgroundColor "#999" :padding 10 :borderRadius 5}
-                              :onPress #(alert "HELLO !!")}
-                             (text {:style {:color "white" :textAlign "center" :fontWeight "bold"}} "press me"))))
+  (view {:style {:flex 1 :flexGrow 10 :padding 5}}
+        (masonry {:columns 2
+                  :customImageComponent (.-default RNFastImage)
+                  :bricks  [{:id 1 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
+                            {:id 2 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
+                            {:id 3 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
+                            {:id 4 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
+                            {:id 5 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
+                            {:id 6 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
+                            {:id 7 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
+                            {:id 8 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}]})))
 
 (defonce root-component-factory (support/make-root-component-factory))
 
@@ -40,3 +49,7 @@
 (defn init []
   (mount-app)
   (.registerComponent app-registry "FunanMobile" (fn [] root-component-factory)))
+
+(comment
+  (println RNFastImage))
+
