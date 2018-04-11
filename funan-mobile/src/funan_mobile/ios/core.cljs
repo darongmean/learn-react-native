@@ -31,25 +31,46 @@
 
 (defc AppRoot < rum/reactive [state]
   (view {:style {:flex 1 :flexGrow 10 :padding 5}}
-        (masonry {:columns 2
+        (masonry {:columns              2
                   :customImageComponent (.-default RNFastImage)
-                  :bricks  [{:id 1 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
-                            {:id 2 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
-                            {:id 3 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
-                            {:id 4 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
-                            {:id 5 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
-                            {:id 6 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
-                            {:id 7 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
-                            {:id 8 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}]})))
+                  :bricks               [{:id 1 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
+                                         {:id 2 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
+                                         {:id 3 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
+                                         {:id 4 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
+                                         {:id 5 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
+                                         {:id 6 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
+                                         {:id 7 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
+                                         {:id 8 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}]})))
+
+
+(defc view1 []
+  (view {:style {:flex 1 :flexGrow 10 :padding 5}}
+        (text {} "Hello world view 1!")))
+
+(defc view2 []
+  (view {:style {:flex 1 :flexGrow 10 :padding 5}}
+        (text {} "Hello world view 2!")))
+
+(def tabbar-ios (partial create-element rn/TabBarIOS))
+(def tabbar-item-ios (partial create-element rn/TabBarIOS.Item))
+
+(defc TabView [state]
+  (tabbar-ios {}
+              (tabbar-item-ios {:title "Tab 1" :selected false}
+                               (view1))
+              (tabbar-item-ios {:title "Tab 2" :selected true :badge "30"}
+                               (view2))))
+
 
 (defonce root-component-factory (support/make-root-component-factory))
 
-(defn mount-app [] (support/mount (AppRoot app-state)))
+(defn mount-app [] (support/mount (TabView app-state)))
 
 (defn init []
   (mount-app)
   (.registerComponent app-registry "FunanMobile" (fn [] root-component-factory)))
 
 (comment
+  (println rn/TabBarIOS.Item)
   (println RNFastImage))
 
