@@ -42,6 +42,20 @@
                                          {:id 7 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}
                                          {:id 8 :uri "https://pbs.twimg.com/media/B59AOmICQAAiGGj.png"}]})))
 
+(def PushNotification (js/require "react-native-push-notification"))
+
+(defc PushController < {:did-mount (fn [state]
+                                     (let [nd (js/Date. (+ (.getTime (js/Date.)) 5000))
+                                           iso (.toISOString nd)]
+                                       (do
+                                         (println "configure " iso)
+                                         (.configure PushNotification #js {:onNotification #(println %1)})
+                                         (.localNotificationSchedule PushNotification #js {:message "Hello" :date nd})
+                                         (println "trigger")))
+                                     (assoc state ::time (js/Date.)))}
+  [state _]
+  #_(text {} (str "date 12345 " (::time state))))
+
 
 (defc view1 []
   (view {:style {:flex 1 :flexGrow 10 :padding 5}}
@@ -49,6 +63,7 @@
 
 (defc view2 []
   (view {:style {:flex 1 :flexGrow 10 :padding 5}}
+        (PushController)
         (text {} "Hello world view 2!")))
 
 (def tabbar-ios (partial create-element rn/TabBarIOS))
@@ -61,16 +76,22 @@
               (tabbar-item-ios {:title "Tab 2" :selected true :badge "30"}
                                (view2))))
 
-
 (defonce root-component-factory (support/make-root-component-factory))
 
+
 (defn mount-app [] (support/mount (TabView app-state)))
+
 
 (defn init []
   (mount-app)
   (.registerComponent app-registry "FunanMobile" (fn [] root-component-factory)))
 
 (comment
+  (println PushNotification)
+  (.getTime (js/Date.))
+  (.toISOString (js/Date. (+ (.getTime (js/Date.)) 5000)))
+  (.configure PushNotification {:onNotification #(.log js/console %1)})
+  (.localNotificationSchedule PushNotification {:message "Hello" :date (.toISOString (js/Date. (+ (.getTime (js/Date.)) 5000)))})
   (println rn/TabBarIOS.Item)
   (println RNFastImage))
 
