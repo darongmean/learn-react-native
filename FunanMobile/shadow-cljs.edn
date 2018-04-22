@@ -1,0 +1,12 @@
+{:source-paths
+ ["cljs"]
+
+ :dependencies
+ []
+
+ :builds
+ {:app {:target :npm-module
+        :runtime :react-native
+        :entries [darongmean.funan]
+        :output-dir "js"}}}
+
