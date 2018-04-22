@@ -1,12 +1,11 @@
 {:source-paths
- ["cljs"]
+ ["cljs" "rum-native"]
 
  :dependencies
- []
+ [[rum "0.11.2"]]
 
  :builds
- {:app {:target :npm-module
-        :runtime :react-native
-        :entries [darongmean.funan]
+ {:app {:target     :npm-module
+        :runtime    :react-native
+        :entries    [darongmean.funan]
         :output-dir "js"}}}
-

@@ -1,0 +1,3 @@
+[submodule "FunanMobile/rum-native"]
+	path = FunanMobile/rum-native
+	url = https://github.com/idokutela/rum-native.git
