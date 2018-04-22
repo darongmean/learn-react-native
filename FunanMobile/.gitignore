@@ -60,3 +60,6 @@ js/*.js
 js/*.map
 .shadow-cljs
 .nrepl-*
+
+# lein
+target
