@@ -1,7 +1,10 @@
 (ns darongmean.funan
+  (:require-macros
+    [cljs.core.async.macros :as async-cljs])
   (:require
     [react-native.core :as rn]
     [rum.core :as rum]
+    [cljs.core.async :as async]
 
     ["react-native-navigation" :refer [Navigation]]
     ["react-native-vector-icons/Octicons" :as Icon]))
@@ -19,4 +22,7 @@
 
 
 (defn main []
-  (.then (.getImageSource Icon "home" 30) start-app))
+  (let [ch (async/chan)]
+    (.then (.getImageSource Icon "home" 30) #(async/put! ch %1))
+    (async-cljs/go
+      (start-app (async/<! ch)))))
