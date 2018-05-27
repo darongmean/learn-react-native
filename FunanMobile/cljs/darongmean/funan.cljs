@@ -30,13 +30,10 @@
    'ListingFeedScreen {}})
 
 
-(def app-context (atom {:state 'Initial :icon {}}))
+(def app-context (atom {:state 'Initial :icon {} :action (async/chan)}))
 
 
-(def action (async/chan))
-
-
-(defn load-resource [context]
+(defn load-resource [{:keys [action] :as context}]
   (do
     (doto Navigation
       (.registerComponent "example.FirstScreen" (fn [] (:rum/class (meta hello-world)))))
@@ -70,7 +67,6 @@
   (assoc-in context [:icon :home] params))
 
 
-
 (defmethod machine/render 'Loading [_])
 
 
@@ -86,4 +82,4 @@
             context (machine/apply-action-on-enter context params)
             _ (machine/render context)
             _ (reset! app-context context)]
-        (recur (async/<! action))))))
+        (recur (async/<! (:action context)))))))
