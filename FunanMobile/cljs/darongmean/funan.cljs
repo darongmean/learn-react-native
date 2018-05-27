@@ -6,7 +6,8 @@
     [rum.core :as rum]
     [cljs.core.async :as async]
     ["react-native-navigation" :refer [Navigation]]
-    ["react-native-vector-icons/Octicons" :as Icon]))
+    ["react-native-vector-icons/Octicons" :as Icon]
+    [darongmean.state-machine :as machine]))
 
 
 (rum/defc hello-world []
@@ -29,34 +30,30 @@
    'ListingFeedScreen {}})
 
 
-(def state (atom {:id 'Initial}))
+(def app-context (atom {:state 'Initial :icon {}}))
 
 
 (def action (async/chan))
 
 
-(defn load-resource []
+(defn load-resource [context]
   (do
     (doto Navigation
       (.registerComponent "example.FirstScreen" (fn [] (:rum/class (meta hello-world)))))
     (-> Icon
         (.getImageSource "home" 30)
-        (.then #(do
-                  (swap! state assoc-in [:icon :home] %1)
-                  (async/put! action :SHOW-SCREEN))))))
+        (.then #(async/put! action [:SHOW-SCREEN %1]))))
+  context)
 
 
-(defn show-listing-feed-screen []
-  (start-app (get-in @state [:icon :home])))
+(defn show-listing-feed-screen [context]
+  (start-app (get-in context [:icon :home])))
 
 
-(defn update-state [{:keys [id] :as prev-state} signal]
-  (let [next-state (get-in state-chart-machine [id signal])]
-    (condp = next-state
-      'Loading (load-resource)
-      'ListingFeedScreen (show-listing-feed-screen))
-    (-> prev-state
-        (assoc :id next-state))))
+(defn next-state [{:keys [state] :as context} signal]
+  (let [next-state (get-in state-chart-machine [state signal])]
+    (-> context
+        (assoc :state next-state))))
 
 
 (defn icon-chan [name size]
@@ -65,10 +62,28 @@
     ch))
 
 
+(defmethod machine/apply-action-on-enter 'Loading [context _]
+  (load-resource context))
+
+
+(defmethod machine/apply-action-on-enter 'ListingFeedScreen [context params]
+  (assoc-in context [:icon :home] params))
+
+
+
+(defmethod machine/render 'Loading [_])
+
+
+(defmethod machine/render 'ListingFeedScreen [context]
+  (show-listing-feed-screen context))
+
+
 (defn main []
   (async-cljs/go
-    (loop []
-      (let [next-state (update-state @state (async/<! action))]
-        (reset! state next-state)
-        (recur))))
-  (async/put! action :RUN-FOREGROUND))
+    (loop [event :RUN-FOREGROUND]
+      (let [[signal params] (if (coll? event) event [event])
+            context (next-state @app-context signal)
+            context (machine/apply-action-on-enter context params)
+            _ (machine/render context)
+            _ (reset! app-context context)]
+        (recur (async/<! action))))))
