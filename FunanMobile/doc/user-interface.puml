@@ -1,0 +1,9 @@
+@startuml
+
+
+[*] --> Initial
+Initial -> Loading:RUN-FOREGROUND
+Loading -> ListingFeedScreen:SHOW-SCREEN
+
+
+@enduml
