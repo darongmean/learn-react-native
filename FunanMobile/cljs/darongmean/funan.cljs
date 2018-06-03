@@ -23,14 +23,11 @@
                                          :label  "Home"
                                          :icon   icon}]}))))
 
-
 (def state-chart-machine
   {'Initial           {:RUN-FOREGROUND 'Loading}
    'Loading           {:SHOW-SCREEN 'ListingFeedScreen}
    'ListingFeedScreen {}})
 
-
-(def app-context (atom {:state 'Initial :icon {} :action (async/chan)}))
 
 
 (defn load-resource [{:keys [action] :as context}]
@@ -76,10 +73,10 @@
 
 (defn main []
   (async-cljs/go
-    (loop [event :RUN-FOREGROUND]
+    (loop [event :RUN-FOREGROUND
+           context {:state 'Initial :icon {} :action (async/chan)}]
       (let [[signal params] (if (coll? event) event [event])
-            context (next-state @app-context signal)
-            context (machine/apply-action-on-enter context params)
-            _ (machine/render context)
-            _ (reset! app-context context)]
-        (recur (async/<! (:action context)))))))
+            context (next-state context signal)
+            context (machine/apply-action-on-enter context params)]
+        (machine/render context)
+        (recur (async/<! (:action context)) context)))))
