@@ -10,6 +10,9 @@
     [darongmean.state-machine :as machine]))
 
 
+(enable-console-print!)
+
+
 (rum/defc hello-world []
   (rn/text {:style {:font-size   30
                     :font-weight :bold}}
