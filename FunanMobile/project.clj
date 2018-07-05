@@ -9,4 +9,5 @@
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.10.238"]
                  [rum "0.11.2"]
+                 [org.roman01la/citrus "3.1.0"]
                  [org.clojure/core.async "0.4.474"]])
