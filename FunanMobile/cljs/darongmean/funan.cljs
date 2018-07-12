@@ -47,7 +47,9 @@
 (defmethod transition-on-event :default [event params {:keys [state-id] :as state-data}]
   (let [next-state-id (get-in state-chart-transitions [state-id event])
         next-state {:state (assoc state-data :state-id next-state-id)}]
-    (activity-on-enter next-state params)))
+    (if next-state-id
+      (activity-on-enter next-state params)
+      {:state state-data})))
 
 
 (defn do-load-icon [r ctrl _]
@@ -63,7 +65,6 @@
 
 (defn do-show-screen [_ _ state]
   (let [icon (get-in state [:icon "home"])]
-    (pprint/pprint state)
     (doto Navigation
       (.startTabBasedApp (clj->js {:tabs [{:screen "example.FirstScreen"
                                            :title  "Home"
