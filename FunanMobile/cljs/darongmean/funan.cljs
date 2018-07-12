@@ -23,7 +23,7 @@
    'ListingFeedScreen {}})
 
 
-(defmulti activity-on-enter (fn [m _] (get-in m [:state :state-id])))
+(defmulti activity-on-enter (fn [app-state event-params] (get-in app-state [:state :state-id])))
 
 
 (defmethod activity-on-enter 'Loading [app-state]
@@ -37,25 +37,26 @@
     (assoc updated :do-show-screen (:state updated))))
 
 
-(defmulti transition-on-event (fn [event] event))
+(defmulti transition-on-event (fn [event-signal] event-signal))
 
 
 (defmethod transition-on-event :init []
   {:state {:state-id 'Initial :icon {}}})
 
 
-(defmethod transition-on-event :default [event params {:keys [state-id] :as state-data}]
-  (let [next-state-id (get-in state-chart-transitions [state-id event])
+(defmethod transition-on-event :default
+  [event-signal event-params {:keys [state-id] :as state-data}]
+  (let [next-state-id (get-in state-chart-transitions [state-id event-signal])
         next-state {:state (assoc state-data :state-id next-state-id)}]
     (if next-state-id
-      (activity-on-enter next-state params)
+      (activity-on-enter next-state event-params)
       {:state state-data})))
 
 
-(defn do-load-icon [r ctrl _]
+(defn do-load-icon [rr ctrl _]
   (-> Icon
       (.getImageSource "home" 30)
-      (.then #(citrus/dispatch! r ctrl :SHOW-SCREEN {"home" %1}))))
+      (.then #(citrus/dispatch! rr ctrl :SHOW-SCREEN {"home" %1}))))
 
 
 (defn do-register-component [_ _ _]
