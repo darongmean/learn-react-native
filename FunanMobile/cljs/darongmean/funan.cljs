@@ -23,7 +23,7 @@
    'ListingFeedScreen {}})
 
 
-(defmulti activity-on-enter (fn [m _] (get-in m [:state :state])))
+(defmulti activity-on-enter (fn [m _] (get-in m [:state :state-id])))
 
 
 (defmethod activity-on-enter 'Loading [app-state]
@@ -41,12 +41,12 @@
 
 
 (defmethod transition-on-event :init []
-  {:state {:state 'Initial :icon {}}})
+  {:state {:state-id 'Initial :icon {}}})
 
 
-(defmethod transition-on-event :default [event params {:keys [state] :as state-data}]
-  (let [next-state-id (get-in state-chart-transitions [state event])
-        next-state {:state (assoc state-data :state next-state-id)}]
+(defmethod transition-on-event :default [event params {:keys [state-id] :as state-data}]
+  (let [next-state-id (get-in state-chart-transitions [state-id event])
+        next-state {:state (assoc state-data :state-id next-state-id)}]
     (activity-on-enter next-state params)))
 
 
@@ -61,7 +61,6 @@
     (.registerComponent "example.FirstScreen" (fn [] (:rum/class (meta hello-world))))))
 
 
-
 (defn do-show-screen [_ _ state]
   (let [icon (get-in state [:icon "home"])]
     (pprint/pprint state)
@@ -71,12 +70,13 @@
                                            :label  "Home"
                                            :icon   icon}]})))))
 
+
 (def reconciler
   (citrus/reconciler
     {:state
      (atom {})
      :controllers
-     {:app transition-on-event}
+     {:state transition-on-event}
      :effect-handlers
      {:do-register-component do-register-component
       :do-load-icon          do-load-icon
