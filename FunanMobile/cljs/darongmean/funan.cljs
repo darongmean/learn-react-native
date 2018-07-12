@@ -1,13 +1,11 @@
 (ns darongmean.funan
-  (:require-macros
-    [cljs.core.async.macros :as async-cljs])
   (:require
     [react-native.core :as rn]
     [rum.core :as rum]
-    [cljs.core.async :as async]
+    [cljs.pprint :as pprint]
+    [citrus.core :as citrus]
     ["react-native-navigation" :refer [Navigation]]
-    ["react-native-vector-icons/Octicons" :as Icon]
-    [darongmean.state-machine :as machine]))
+    ["react-native-vector-icons/Octicons" :as Icon]))
 
 
 (enable-console-print!)
@@ -19,67 +17,84 @@
            "Hello, world!"))
 
 
-(defn start-app [icon]
-  (doto Navigation
-    (.startTabBasedApp (clj->js {:tabs [{:screen "example.FirstScreen"
-                                         :title  "Home"
-                                         :label  "Home"
-                                         :icon   icon}]}))))
-
-(def state-chart-machine
+(def state-chart-transitions
   {'Initial           {:RUN-FOREGROUND 'Loading}
    'Loading           {:SHOW-SCREEN 'ListingFeedScreen}
    'ListingFeedScreen {}})
 
 
+(defmulti activity-on-enter (fn [m _] (get-in m [:state :state])))
 
-(defn load-resource [{:keys [action] :as context}]
-  (do
+
+(defmethod activity-on-enter 'Loading [app-state]
+  (-> app-state
+      (assoc :do-register-component [])
+      (assoc :do-load-icon [])))
+
+
+(defmethod activity-on-enter 'ListingFeedScreen [app-state [icon]]
+  (let [updated (assoc-in app-state [:state :icon] icon)]
+    (assoc updated :do-show-screen (:state updated))))
+
+
+(defmulti transition-on-event (fn [event] event))
+
+
+(defmethod transition-on-event :init []
+  {:state {:state 'Initial :icon {}}})
+
+
+(defmethod transition-on-event :default [event params {:keys [state] :as state-data}]
+  (let [next-state-id (get-in state-chart-transitions [state event])
+        next-state {:state (assoc state-data :state next-state-id)}]
+    (activity-on-enter next-state params)))
+
+
+(defn do-load-icon [r ctrl _]
+  (-> Icon
+      (.getImageSource "home" 30)
+      (.then #(citrus/dispatch! r ctrl :SHOW-SCREEN {"home" %1}))))
+
+
+(defn do-register-component [_ _ _]
+  (doto Navigation
+    (.registerComponent "example.FirstScreen" (fn [] (:rum/class (meta hello-world))))))
+
+
+
+(defn do-show-screen [_ _ state]
+  (let [icon (get-in state [:icon "home"])]
+    (pprint/pprint state)
     (doto Navigation
-      (.registerComponent "example.FirstScreen" (fn [] (:rum/class (meta hello-world)))))
-    (-> Icon
-        (.getImageSource "home" 30)
-        (.then #(async/put! action [:SHOW-SCREEN %1]))))
-  context)
+      (.startTabBasedApp (clj->js {:tabs [{:screen "example.FirstScreen"
+                                           :title  "Home"
+                                           :label  "Home"
+                                           :icon   icon}]})))))
+
+(def reconciler
+  (citrus/reconciler
+    {:state
+     (atom {})
+     :controllers
+     {:app transition-on-event}
+     :effect-handlers
+     {:do-register-component do-register-component
+      :do-load-icon          do-load-icon
+      :do-show-screen        do-show-screen}}))
 
 
-(defn show-listing-feed-screen [context]
-  (start-app (get-in context [:icon :home])))
+;(defonce init-ctrl (citrus/broadcast-sync! reconciler :init))
 
-
-(defn next-state [{:keys [state] :as context} signal]
-  (let [next-state (get-in state-chart-machine [state signal])]
-    (-> context
-        (assoc :state next-state))))
-
-
-(defn icon-chan [name size]
-  (let [ch (async/chan)]
-    (-> Icon (.getImageSource name size) (.then #(async/put! ch %1)))
-    ch))
-
-
-(defmethod machine/apply-action-on-enter 'Loading [context _]
-  (load-resource context))
-
-
-(defmethod machine/apply-action-on-enter 'ListingFeedScreen [context params]
-  (assoc-in context [:icon :home] params))
-
-
-(defmethod machine/render 'Loading [_])
-
-
-(defmethod machine/render 'ListingFeedScreen [context]
-  (show-listing-feed-screen context))
+(def debug
+  (add-watch
+    reconciler
+    :debug
+    #(do
+       (println "---debug state---")
+       (pprint/pprint %4)
+       (println "---debug state---"))))
 
 
 (defn main []
-  (async-cljs/go
-    (loop [event :RUN-FOREGROUND
-           context {:state 'Initial :icon {} :action (async/chan)}]
-      (let [[signal params] (if (coll? event) event [event])
-            context (next-state context signal)
-            context (machine/apply-action-on-enter context params)]
-        (machine/render context)
-        (recur (async/<! (:action context)) context)))))
+  (citrus/broadcast-sync! reconciler :init)
+  (citrus/broadcast! reconciler :RUN-FOREGROUND))
