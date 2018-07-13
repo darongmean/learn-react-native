@@ -43,18 +43,18 @@
     (merge app-state activity)))
 
 
-(defmulti transition-on-event (fn [event-signal] event-signal))
+(defmulti dispatch-on-event (fn [event-signal] event-signal))
 
 
-(defmethod transition-on-event :init []
+(defmethod dispatch-on-event :init []
   {:state {:state-id 'Initial :state-chart state-chart-transitions}})
 
 
-(defmethod transition-on-event :default
+(defmethod dispatch-on-event :default
   [event-signal event-params {:keys [state-id state-chart] :as context}]
   (let [next-state-id (get-in state-chart [state-id :on event-signal])
-        next-context (assoc context :state-id next-state-id)
-        next-context (context-on-enter next-context event-params)
+        transition (assoc context :state-id next-state-id)
+        next-context (context-on-enter transition event-params)
         next-state {:state next-context}]
     (if next-state-id
       (activity-on-enter next-state)
@@ -86,7 +86,7 @@
     {:state
      (atom {})
      :controllers
-     {:context transition-on-event}
+     {:context dispatch-on-event}
      :effect-handlers
      {:do-register-component do-register-component
       :do-load-icon          do-load-icon
