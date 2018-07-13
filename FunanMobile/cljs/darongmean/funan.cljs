@@ -35,9 +35,8 @@
 
 
 (defn activity-on-enter [app-state]
-  (let [context (:state app-state)
-        state-id (:state-id context)
-        activity-id-coll (get-in state-chart-transitions [state-id :on-enter])
+  (let [{:keys [state-id state-chart] :as context} (:state app-state)
+        activity-id-coll (get-in state-chart [state-id :on-enter])
         activity (->> (repeat context)
                       (interleave activity-id-coll)
                       (apply hash-map))]
@@ -48,12 +47,12 @@
 
 
 (defmethod transition-on-event :init []
-  {:state {:state-id 'Initial :icon {}}})
+  {:state {:state-id 'Initial :state-chart state-chart-transitions}})
 
 
 (defmethod transition-on-event :default
-  [event-signal event-params {:keys [state-id] :as context}]
-  (let [next-state-id (get-in state-chart-transitions [state-id :on event-signal])
+  [event-signal event-params {:keys [state-id state-chart] :as context}]
+  (let [next-state-id (get-in state-chart [state-id :on event-signal])
         next-context (assoc context :state-id next-state-id)
         next-context (context-on-enter next-context event-params)
         next-state {:state next-context}]
