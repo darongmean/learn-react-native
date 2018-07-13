@@ -19,22 +19,29 @@
 
 (def state-chart-transitions
   {'Initial           {:on {:RUN-FOREGROUND 'Loading}}
-   'Loading           {:on {:SHOW-SCREEN 'ListingFeedScreen}}
-   'ListingFeedScreen {}})
+   'Loading           {:on       {:SHOW-SCREEN 'ListingFeedScreen}
+                       :on-enter [:do-register-component :do-load-icon]}
+   'ListingFeedScreen {:on-enter [:do-show-screen]}})
 
 
-(defmulti activity-on-enter (fn [app-state event-params] (get-in app-state [:state :state-id])))
+(defmulti context-on-enter (fn [context event-params] (:state-id context)))
 
 
-(defmethod activity-on-enter 'Loading [app-state]
-  (-> app-state
-      (assoc :do-register-component [])
-      (assoc :do-load-icon [])))
+(defmethod context-on-enter :default [m _] m)
 
 
-(defmethod activity-on-enter 'ListingFeedScreen [app-state [icon]]
-  (let [updated (assoc-in app-state [:state :icon] icon)]
-    (assoc updated :do-show-screen (:state updated))))
+(defmethod context-on-enter 'ListingFeedScreen [context [icon]]
+  (assoc context :icon icon))
+
+
+(defn activity-on-enter [app-state]
+  (let [context (:state app-state)
+        state-id (:state-id context)
+        activity-id-coll (get-in state-chart-transitions [state-id :on-enter])
+        activity (->> (repeat context)
+                      (interleave activity-id-coll)
+                      (apply hash-map))]
+    (merge app-state activity)))
 
 
 (defmulti transition-on-event (fn [event-signal] event-signal))
@@ -45,18 +52,20 @@
 
 
 (defmethod transition-on-event :default
-  [event-signal event-params {:keys [state-id] :as state-data}]
+  [event-signal event-params {:keys [state-id] :as context}]
   (let [next-state-id (get-in state-chart-transitions [state-id :on event-signal])
-        next-state {:state (assoc state-data :state-id next-state-id)}]
+        next-context (assoc context :state-id next-state-id)
+        next-context (context-on-enter next-context event-params)
+        next-state {:state next-context}]
     (if next-state-id
-      (activity-on-enter next-state event-params)
-      {:state state-data})))
+      (activity-on-enter next-state)
+      {:state context})))
 
 
-(defn do-load-icon [rr ctrl _]
+(defn do-load-icon [rr _ _]
   (-> Icon
       (.getImageSource "home" 30)
-      (.then #(citrus/dispatch! rr ctrl :SHOW-SCREEN {"home" %1}))))
+      (.then #(citrus/broadcast! rr :SHOW-SCREEN {"home" %1}))))
 
 
 (defn do-register-component [_ _ _]
@@ -64,8 +73,8 @@
     (.registerComponent "example.FirstScreen" (fn [] (:rum/class (meta hello-world))))))
 
 
-(defn do-show-screen [_ _ state]
-  (let [icon (get-in state [:icon "home"])]
+(defn do-show-screen [_ _ context]
+  (let [icon (get-in context [:icon "home"])]
     (doto Navigation
       (.startTabBasedApp (clj->js {:tabs [{:screen "example.FirstScreen"
                                            :title  "Home"
