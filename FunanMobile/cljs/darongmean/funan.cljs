@@ -18,8 +18,8 @@
 
 
 (def state-chart-transitions
-  {'Initial           {:RUN-FOREGROUND 'Loading}
-   'Loading           {:SHOW-SCREEN 'ListingFeedScreen}
+  {'Initial           {:on {:RUN-FOREGROUND 'Loading}}
+   'Loading           {:on {:SHOW-SCREEN 'ListingFeedScreen}}
    'ListingFeedScreen {}})
 
 
@@ -46,7 +46,7 @@
 
 (defmethod transition-on-event :default
   [event-signal event-params {:keys [state-id] :as state-data}]
-  (let [next-state-id (get-in state-chart-transitions [state-id event-signal])
+  (let [next-state-id (get-in state-chart-transitions [state-id :on event-signal])
         next-state {:state (assoc state-data :state-id next-state-id)}]
     (if next-state-id
       (activity-on-enter next-state event-params)
@@ -78,7 +78,7 @@
     {:state
      (atom {})
      :controllers
-     {:state transition-on-event}
+     {:context transition-on-event}
      :effect-handlers
      {:do-register-component do-register-component
       :do-load-icon          do-load-icon
