@@ -9,7 +9,7 @@
 
 (enable-console-print!)
 
-
+; Event-Action table?
 (def state-chart-transitions
   {'Initial           {:on {:RUN-FOREGROUND 'Loading}}
    'Loading           {:on       {:SHOW-SCREEN 'ListingFeedScreen}
