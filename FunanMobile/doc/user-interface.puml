@@ -1,9 +1,20 @@
 @startuml
 
 
-[*] --> Initial
-Initial -> Loading:RUN-FOREGROUND
-Loading -> ListingFeedScreen:SHOW-SCREEN
+state 01_Application {
+[*] --> Transient
+
+Transient -> 02_Loaded:(icon is loaded)
+Transient -> Loading:(icon not loaded)
+
+Loading -> Transient:load icon
+
+state 02_Loaded {
+[*] -> 03_ListingFeedScreen
+
+}
+
+}
 
 
 @enduml
