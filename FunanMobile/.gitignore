@@ -56,8 +56,7 @@ buck-out/
 *.jsbundle
 
 # shadow-cljs
-js/*.js
-js/*.map
+js
 .shadow-cljs
 .nrepl-*
 
