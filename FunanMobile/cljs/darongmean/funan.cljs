@@ -3,7 +3,6 @@
     [darongmean.state-machine :as stm]
     [darongmean.activity :as activity]
     [darongmean.state.listing-feed-screen]
-    [cljs.pprint :as pprint]
     [citrus.core :as citrus]))
 
 
@@ -21,7 +20,7 @@
   {:state {:state-id 'Initial :state-chart state-chart-transitions}})
 
 
-(def reconciler
+(defonce reconciler
   (citrus/reconciler
     {:state
      (atom {})
@@ -35,16 +34,10 @@
 
 ;(defonce init-ctrl (citrus/broadcast-sync! reconciler :init))
 
-(def debug
-  (add-watch
-    reconciler
-    :debug
-    #(do
-       (println "---debug state---")
-       (pprint/pprint %4)
-       (println "---debug state---"))))
-
 
 (defn main []
   (citrus/broadcast-sync! reconciler :init)
   (citrus/broadcast! reconciler :RUN-FOREGROUND))
+
+
+(defonce _ (main))

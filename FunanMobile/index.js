@@ -7,10 +7,7 @@ AppRegistry.registerComponent('FunanMobile', () => App);
 
 */
 
-// TODO: remove the repl when release
-import './js/shadow.cljs.devtools.client.react_native';
 
-import { main } from './js/darongmean.funan';
+//import { main } from './js/darongmean.funan';
 
-main();
-
+import * as dev from './js/dev.hot_reload';

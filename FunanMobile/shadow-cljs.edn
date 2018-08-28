@@ -9,5 +9,5 @@
  :builds
  {:app {:target     :npm-module
         :runtime    :react-native
-        :entries    [darongmean.funan]
+        :entries    [dev.hot-reload]
         :output-dir "js"}}}
