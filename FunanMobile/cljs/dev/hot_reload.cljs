@@ -6,7 +6,7 @@
 
 
 (defn after-load []
-  (citrus/broadcast! funan/reconciler :RUN-FOREGROUND)
+  ;(citrus/broadcast! funan/reconciler :init)
   (pprint/pprint @funan/reconciler))
 
 

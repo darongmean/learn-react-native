@@ -22,13 +22,29 @@
 ;[context {}])
 
 
-(defn update-context [event args context]
-  {:state {:state-id 'Initial :state-chart state-chart-transitions}})
+(def +init+ {:mode/screen :screen/init})
 
 
-(defonce reconciler
+(defn update-context [event args state]
+  (cond
+    (= :init event)
+    {:state                 +init+
+     :do-register-component +init+
+     :do-load-icon          +init+}
+
+    (= :update-icon event)
+    (let [[k icon] args
+          new-state (assoc-in state [:icon k] icon)]
+      {:state          new-state
+       :do-show-screen new-state})))
+
+
+(defonce ^:private *app (atom {}))
+
+
+(def reconciler
   (citrus/reconciler
-    {:state           (atom {})
+    {:state           *app
      :controllers     {:context update-context}
      :effect-handlers {:do-register-component activity/do-register-component
                        :do-load-icon          activity/do-load-icon
@@ -39,4 +55,4 @@
   (citrus/broadcast-sync! reconciler :init))
 
 
-;(defonce _ (main))
+(defonce _ (main))

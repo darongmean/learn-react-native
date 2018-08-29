@@ -2,7 +2,6 @@
   (:require
     [react-native.core :as rn]
     [rum.core :as rum]
-    [cljs.pprint :as pprint]
     [citrus.core :as citrus]
     ["react-native-navigation" :refer [Navigation]]
     ["react-native-vector-icons/Octicons" :as Icon]))
@@ -17,7 +16,7 @@
 (defn do-load-icon [rr _ _]
   (-> Icon
       (.getImageSource "home" 30)
-      (.then #(citrus/broadcast! rr :SHOW-SCREEN {"home" %1}))))
+      (.then #(citrus/broadcast! rr :update-icon :home %1))))
 
 
 (defn do-register-component [_ _ _]
@@ -26,7 +25,7 @@
 
 
 (defn do-show-screen [_ _ context]
-  (let [icon (get-in context [:icon "home"])]
+  (let [icon (get-in context [:icon :home])]
     (doto Navigation
       (.startTabBasedApp (clj->js {:tabs [{:screen "example.FirstScreen"
                                            :title  "Home"
