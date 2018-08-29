@@ -23,15 +23,16 @@
 
 
 (def +init+
-  {:mode/screen    :screen/init
-   :mode/component :component/init
-   :mode/icon      :icon/init})
+  {:mode/screen    :init
+   :mode/component :init
+   :mode/icon      :init})
 
 
 (defn show-screen [state]
   (if (= [:component/registered :icon/loaded]
          [(:mode/component state) (:mode/icon state)])
-    {:state state :do-show-screen state}
+    (let [st (assoc state :mode/screen :hello-world)]
+      {:state st :do-show-screen st})
     {:state state}))
 
 
@@ -39,11 +40,14 @@
   (cond
     (= :init event)
     {:state                 +init+
-     :do-register-component +init+
+     :do-register-component [:hello-world]
      :do-load-icon          +init+}
 
     (= :component-registered event)
-    (let [new-sate (assoc state :mode/component :component/registered)]
+    (let [[k screen] args
+          new-sate (-> state
+                       (assoc :mode/component :component/registered)
+                       (assoc-in [:screen k] screen))]
       (show-screen new-sate))
 
     (= :icon-loaded event)

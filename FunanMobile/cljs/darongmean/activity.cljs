@@ -19,16 +19,19 @@
       (.then #(citrus/broadcast! rr :icon-loaded :home %1))))
 
 
-(defn do-register-component [rr _ _]
-  (doto Navigation
-    (.registerComponent "example.FirstScreen" (fn [] (:rum/class (meta hello-world)))))
-  (citrus/broadcast! rr :component-registered))
+(defn do-register-component [rr _ xs]
+  (doseq [x xs]
+    (doto Navigation
+      (.registerComponent "example.FirstScreen" (fn [] (:rum/class (meta hello-world)))))
+    (citrus/broadcast! rr :component-registered x "example.FirstScreen")))
 
 
 (defn do-show-screen [_ _ context]
-  (let [icon (get-in context [:icon :home])]
+  (let [screen-key (:mode/screen context)
+        screen-name (get-in context [:screen screen-key])
+        icon (get-in context [:icon :home])]
     (doto Navigation
-      (.startTabBasedApp (clj->js {:tabs [{:screen "example.FirstScreen"
+      (.startTabBasedApp (clj->js {:tabs [{:screen screen-name
                                            :title  "Home"
                                            :label  "Home"
                                            :icon   icon}]})))))
