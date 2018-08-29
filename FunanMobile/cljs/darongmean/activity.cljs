@@ -16,12 +16,13 @@
 (defn do-load-icon [rr _ _]
   (-> Icon
       (.getImageSource "home" 30)
-      (.then #(citrus/broadcast! rr :update-icon :home %1))))
+      (.then #(citrus/broadcast! rr :icon-loaded :home %1))))
 
 
-(defn do-register-component [_ _ _]
+(defn do-register-component [rr _ _]
   (doto Navigation
-    (.registerComponent "example.FirstScreen" (fn [] (:rum/class (meta hello-world))))))
+    (.registerComponent "example.FirstScreen" (fn [] (:rum/class (meta hello-world)))))
+  (citrus/broadcast! rr :component-registered))
 
 
 (defn do-show-screen [_ _ context]

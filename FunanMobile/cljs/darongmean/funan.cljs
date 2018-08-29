@@ -22,7 +22,17 @@
 ;[context {}])
 
 
-(def +init+ {:mode/screen :screen/init})
+(def +init+
+  {:mode/screen    :screen/init
+   :mode/component :component/init
+   :mode/icon      :icon/init})
+
+
+(defn show-screen [state]
+  (if (= [:component/registered :icon/loaded]
+         [(:mode/component state) (:mode/icon state)])
+    {:state state :do-show-screen state}
+    {:state state}))
 
 
 (defn update-context [event args state]
@@ -32,11 +42,16 @@
      :do-register-component +init+
      :do-load-icon          +init+}
 
-    (= :update-icon event)
+    (= :component-registered event)
+    (let [new-sate (assoc state :mode/component :component/registered)]
+      (show-screen new-sate))
+
+    (= :icon-loaded event)
     (let [[k icon] args
-          new-state (assoc-in state [:icon k] icon)]
-      {:state          new-state
-       :do-show-screen new-state})))
+          new-state (-> state
+                        (assoc :mode/icon :icon/loaded)
+                        (assoc-in [:icon k] icon))]
+      (show-screen new-state))))
 
 
 (defonce ^:private *app (atom {}))
