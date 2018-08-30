@@ -13,17 +13,18 @@
            "Hello, world!"))
 
 
-(defn do-load-icon [rr _ _]
-  (-> Icon
-      (.getImageSource "home" 30)
-      (.then #(citrus/broadcast! rr :icon-loaded :home %1))))
+(defn do-load-icon [rr _ xs]
+  (doseq [kw xs]
+    (-> Icon
+        (.getImageSource (name kw) 30)
+        (.then #(citrus/broadcast! rr :icon-loaded kw %1)))))
 
 
 (defn do-register-component [rr _ xs]
-  (doseq [x xs]
+  (doseq [kw xs]
     (doto Navigation
       (.registerComponent "example.FirstScreen" (fn [] (:rum/class (meta hello-world)))))
-    (citrus/broadcast! rr :component-registered x "example.FirstScreen")))
+    (citrus/broadcast! rr :component-registered kw "example.FirstScreen")))
 
 
 (defn do-show-screen [_ _ context]

@@ -41,7 +41,7 @@
     (= :init event)
     {:state                 +init+
      :do-register-component [:hello-world]
-     :do-load-icon          +init+}
+     :do-load-icon          [:home]}
 
     (= :component-registered event)
     (let [[k screen] args
