@@ -20,11 +20,12 @@
         (.then #(citrus/broadcast! rr :icon-loaded kw %1)))))
 
 
-(defn do-register-component [rr _ xs]
-  (doseq [kw xs]
-    (doto Navigation
-      (.registerComponent "example.FirstScreen" (fn [] (:rum/class (meta hello-world)))))
-    (citrus/broadcast! rr :component-registered kw "example.FirstScreen")))
+(defn do-register-component [rr _ coll]
+  (doseq [[kw comp-name] (seq coll)
+          :let [as-rum {:hello-world hello-world}
+                comp-rum (as-rum kw)]]
+    (.registerComponent Navigation comp-name (fn [] (:rum/class (meta comp-rum)))))
+  (citrus/broadcast! rr :component-registered coll))
 
 
 (defn do-show-screen [_ _ context]

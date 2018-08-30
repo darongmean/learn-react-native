@@ -40,14 +40,14 @@
   (cond
     (= :init event)
     {:state                 +init+
-     :do-register-component [:hello-world]
+     :do-register-component {:hello-world "example.FirstScreen"}
      :do-load-icon          [:home]}
 
     (= :component-registered event)
-    (let [[k screen] args
+    (let [[coll] args
           new-sate (-> state
                        (assoc :mode/component :component/registered)
-                       (assoc-in [:screen k] screen))]
+                       (assoc :screen coll))]
       (show-screen new-sate))
 
     (= :icon-loaded event)
