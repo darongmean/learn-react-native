@@ -13,6 +13,10 @@
            "Hello, world!"))
 
 
+(def rum-by-keyword
+  {:hello-world hello-world})
+
+
 (defn do-load-icon [rr _ xs]
   (doseq [kw xs]
     (-> Icon
@@ -22,8 +26,7 @@
 
 (defn do-register-component [rr _ coll]
   (doseq [[kw comp-name] (seq coll)
-          :let [as-rum {:hello-world hello-world}
-                comp-rum (as-rum kw)]]
+          :let [comp-rum (rum-by-keyword kw)]]
     (.registerComponent Navigation comp-name (fn [] (:rum/class (meta comp-rum)))))
   (citrus/broadcast! rr :component-registered coll))
 
