@@ -40,7 +40,7 @@
   (cond
     (= :init event)
     {:state                 +init+
-     :do-register-component {:hello-world "example.FirstScreen"}
+     :do-register-component {:hello-world (name (gensym))}
      :do-load-icon          [:home]}
 
     (= :component-registered event)
