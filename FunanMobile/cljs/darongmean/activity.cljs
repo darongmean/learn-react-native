@@ -29,15 +29,15 @@
 
 
 (defn do-register-component [rr _ coll]
-  (doseq [[kw comp-name] (seq coll)
+  (doseq [[kw {:keys [uid]}] (seq coll)
           :let [comp-rum (rum-by-keyword kw)]]
-    (.registerComponent Navigation comp-name (fn [] (:rum/class (meta comp-rum)))))
+    (.registerComponent Navigation uid (fn [] (:rum/class (meta comp-rum)))))
   (citrus/broadcast! rr :component-registered coll))
 
 
 (defn do-show-screen [_ _ context]
   (let [screen-key (:mode/screen context)
-        screen-name (get-in context [:screen screen-key])
+        screen-name (get-in context [:screen screen-key :uid])
         icon (get-in context [:icon :home])]
     (doto Navigation
       (.startTabBasedApp (clj->js {:tabs [{:screen screen-name

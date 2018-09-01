@@ -40,7 +40,7 @@
   (cond
     (= :init event)
     {:state                 +init+
-     :do-register-component {:hello-world (name (gensym))}
+     :do-register-component {:hello-world {:uid "darong.funan.hello-world"}}
      :do-load-icon          {:home {:size 30}}}
 
     (= :component-registered event)
