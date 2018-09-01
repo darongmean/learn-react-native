@@ -26,16 +26,16 @@
 
 (defmethod context/update-on :component-registered
   [_ [coll] state]
-  (let [new-sate (-> state
-                     (assoc :mode/component :component/registered)
-                     (assoc :screen coll))]
-    (show-screen new-sate)))
+  (-> state
+      (assoc :mode/component :component/registered)
+      (assoc :screen coll)
+      (show-screen)))
 
 
 (defmethod context/update-on :icon-loaded
   [_ [coll] state]
-  (let [new-state (-> state
-                      (assoc :mode/icon :icon/loaded)
-                      (assoc :icon coll))]
-    (show-screen new-state)))
+  (-> state
+      (assoc :mode/icon :icon/loaded)
+      (assoc :icon coll)
+      (show-screen)))
 
