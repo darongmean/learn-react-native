@@ -1,5 +1,6 @@
 (ns darongmean.funan
   (:require
+    [darongmean.activity]
     [darongmean.state-machine :as stm]))
 
 

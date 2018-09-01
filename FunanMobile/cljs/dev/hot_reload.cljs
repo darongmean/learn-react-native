@@ -1,6 +1,7 @@
 (ns dev.hot-reload
   (:require
     [cljs.pprint :as pprint]
+    [darongmean.funan]
     [darongmean.state-machine :as stm]))
 
 

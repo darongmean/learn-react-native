@@ -1,7 +1,7 @@
 (ns darongmean.activity
   (:require
-    [citrus.core :as citrus]
     [cljs.core.async :as async :refer-macros [go]]
+    [darongmean.state-machine :as stm]
     [react-native.core :as rn]
     ["react-native-navigation" :refer [Navigation]]
     ["react-native-vector-icons/Octicons" :as Icon]
@@ -30,7 +30,8 @@
     ch))
 
 
-(defn do-load-icon [rr _ coll]
+(defmethod stm/do-load-icon :default
+  [_ _ coll]
   (let [icons (for [[kw options] (seq coll)
                     :let [icon-name (icon-name-by-kw kw)
                           params (-> options (assoc :kw kw) (assoc :icon-name icon-name))]]
@@ -39,17 +40,19 @@
       (->> icons
            (async/map merge)
            (async/<!)
-           (citrus/broadcast! rr :icon-loaded)))))
+           (stm/broadcast! :icon-loaded)))))
 
 
-(defn do-register-component [rr _ coll]
+(defmethod stm/do-register-component :default
+  [_ _ coll]
   (doseq [[kw {:keys [uid]}] (seq coll)
           :let [comp-rum (rum-by-keyword kw)]]
     (.registerComponent Navigation uid (fn [] (:rum/class (meta comp-rum)))))
-  (citrus/broadcast! rr :component-registered coll))
+  (stm/broadcast! :component-registered coll))
 
 
-(defn do-show-screen [_ _ context]
+(defmethod stm/do-show-screen :default
+  [_ _ context]
   (let [screen-key (:mode/screen context)
         screen-name (get-in context [:screen screen-key :uid])
         icon (get-in context [:icon :home])]
