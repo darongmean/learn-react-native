@@ -36,26 +36,30 @@
     {:state state}))
 
 
-(defn update-context [event args state]
-  (cond
-    (= :init event)
-    {:state                 +init+
-     :do-register-component {:hello-world {:uid "darong.funan.hello-world"}}
-     :do-load-icon          {:home {:size 30}}}
+(defmulti update-context (fn [event-signal] event-signal))
 
-    (= :component-registered event)
-    (let [[coll] args
-          new-sate (-> state
-                       (assoc :mode/component :component/registered)
-                       (assoc :screen coll))]
-      (show-screen new-sate))
 
-    (= :icon-loaded event)
-    (let [[coll] args
-          new-state (-> state
-                        (assoc :mode/icon :icon/loaded)
-                        (assoc :icon coll))]
-      (show-screen new-state))))
+(defmethod update-context :init
+  [_]
+  {:state                 +init+
+   :do-register-component {:hello-world {:uid "darong.funan.hello-world"}}
+   :do-load-icon          {:home {:size 30}}})
+
+
+(defmethod update-context :component-registered
+  [_ [coll] state]
+  (let [new-sate (-> state
+                     (assoc :mode/component :component/registered)
+                     (assoc :screen coll))]
+    (show-screen new-sate)))
+
+
+(defmethod update-context :icon-loaded
+  [_ [coll] state]
+  (let [new-state (-> state
+                      (assoc :mode/icon :icon/loaded)
+                      (assoc :icon coll))]
+    (show-screen new-state)))
 
 
 (defonce ^:private *app (atom {}))
