@@ -1,6 +1,7 @@
 (ns darongmean.funan
   (:require
-    [darongmean.activity.react-native]
+    [darongmean.activity.navigation]
+    [darongmean.activity.vector-icons]
     [darongmean.init.event]
     [darongmean.state-machine :as stm]))
 
