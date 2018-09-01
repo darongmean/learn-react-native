@@ -1,10 +1,11 @@
 (ns darongmean.activity
   (:require
-    [react-native.core :as rn]
-    [rum.core :as rum]
     [citrus.core :as citrus]
+    [cljs.core.async :as async :refer-macros [go]]
+    [react-native.core :as rn]
     ["react-native-navigation" :refer [Navigation]]
-    ["react-native-vector-icons/Octicons" :as Icon]))
+    ["react-native-vector-icons/Octicons" :as Icon]
+    [rum.core :as rum]))
 
 
 (rum/defc hello-world []
@@ -21,11 +22,24 @@
   {:home "home"})
 
 
-(defn do-load-icon [rr _ coll]
-  (doseq [[kw {:keys [size]}] (seq coll)]
+(defn icon-chan [{:keys [kw icon-name size]}]
+  (let [ch (async/chan)]
     (-> Icon
-        (.getImageSource (icon-name-by-kw kw) size)
-        (.then #(citrus/broadcast! rr :icon-loaded kw %1)))))
+        (.getImageSource icon-name size)
+        (.then #(async/put! ch {kw %1})))
+    ch))
+
+
+(defn do-load-icon [rr _ coll]
+  (let [icons (for [[kw options] (seq coll)
+                    :let [icon-name (icon-name-by-kw kw)
+                          params (-> options (assoc :kw kw) (assoc :icon-name icon-name))]]
+                (icon-chan params))]
+    (go
+      (->> icons
+           (async/map merge)
+           (async/<!)
+           (citrus/broadcast! rr :icon-loaded)))))
 
 
 (defn do-register-component [rr _ coll]

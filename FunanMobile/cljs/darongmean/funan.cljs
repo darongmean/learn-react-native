@@ -51,10 +51,10 @@
       (show-screen new-sate))
 
     (= :icon-loaded event)
-    (let [[k icon] args
+    (let [[coll] args
           new-state (-> state
                         (assoc :mode/icon :icon/loaded)
-                        (assoc-in [:icon k] icon))]
+                        (assoc :icon coll))]
       (show-screen new-state))))
 
 
