@@ -2,7 +2,7 @@
   (:require
     [citrus.core :as citrus]
     [darongmean.activity :as activity]
-    [darongmean.event :as context]))
+    [darongmean.context :as context]))
 
 ;;; --------------- States
 (defonce ^:private *app (atom {}))
@@ -11,7 +11,7 @@
 (def reconciler
   (citrus/reconciler
     {:state           *app
-     :controllers     {:context context/update-context}
+     :controllers     {:context context/update-on}
      :effect-handlers {:do-register-component activity/do-register-component
                        :do-load-icon          activity/do-load-icon
                        :do-show-screen        activity/do-show-screen}}))
