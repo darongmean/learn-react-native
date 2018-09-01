@@ -1,6 +1,7 @@
 (ns darongmean.funan
   (:require
-    [darongmean.activity]
+    [darongmean.activity.react-native]
+    [darongmean.event :as context]
     [darongmean.state-machine :as stm]))
 
 
@@ -34,14 +35,14 @@
     {:state state}))
 
 
-(defmethod stm/update-context :init
+(defmethod context/update-context :init
   [_]
   {:state                 +init+
    :do-register-component {:hello-world {:uid "darong.funan.hello-world"}}
    :do-load-icon          {:home {:size 30}}})
 
 
-(defmethod stm/update-context :component-registered
+(defmethod context/update-context :component-registered
   [_ [coll] state]
   (let [new-sate (-> state
                      (assoc :mode/component :component/registered)
@@ -49,7 +50,7 @@
     (show-screen new-sate)))
 
 
-(defmethod stm/update-context :icon-loaded
+(defmethod context/update-context :icon-loaded
   [_ [coll] state]
   (let [new-state (-> state
                       (assoc :mode/icon :icon/loaded)

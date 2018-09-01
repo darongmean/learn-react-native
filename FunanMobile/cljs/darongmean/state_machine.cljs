@@ -1,19 +1,8 @@
 (ns darongmean.state-machine
   (:require
-    [citrus.core :as citrus]))
-
-;;; --------------- Handling event functions
-(defmulti update-context (fn [event] event))
-
-;;; --------------- Side effect functions
-(defmulti do-register-component (fn [_ ctrl _] ctrl))
-
-
-(defmulti do-load-icon (fn [_ ctrl _] ctrl))
-
-
-(defmulti do-show-screen (fn [_ ctrl _] ctrl))
-
+    [citrus.core :as citrus]
+    [darongmean.activity :as activity]
+    [darongmean.event :as context]))
 
 ;;; --------------- States
 (defonce ^:private *app (atom {}))
@@ -22,10 +11,10 @@
 (def reconciler
   (citrus/reconciler
     {:state           *app
-     :controllers     {:context update-context}
-     :effect-handlers {:do-register-component do-register-component
-                       :do-load-icon          do-load-icon
-                       :do-show-screen        do-show-screen}}))
+     :controllers     {:context context/update-context}
+     :effect-handlers {:do-register-component activity/do-register-component
+                       :do-load-icon          activity/do-load-icon
+                       :do-show-screen        activity/do-show-screen}}))
 
 
 ;;; --------------- Subscription functions
