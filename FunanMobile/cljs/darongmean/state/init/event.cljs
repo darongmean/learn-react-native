@@ -1,4 +1,4 @@
-(ns darongmean.init.event
+(ns darongmean.state.init.event
   (:require
     [darongmean.context :as context]))
 

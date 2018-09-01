@@ -1,8 +1,8 @@
 (ns darongmean.activity.navigation
   (:require
     [darongmean.activity :as activity]
+    [darongmean.state.listing.ui :as listing]
     [darongmean.state-machine :as stm]
-    [darongmean.listing.ui :as listing]
     ["react-native-navigation" :refer [Navigation]]))
 
 
