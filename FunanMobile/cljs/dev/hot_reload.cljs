@@ -1,15 +1,14 @@
 (ns dev.hot-reload
   (:require
-    [citrus.core :as citrus]
     [cljs.pprint :as pprint]
-    [darongmean.funan :as funan]))
+    [darongmean.state-machine :as stm]))
 
 
 (defn after-load []
-  (citrus/broadcast-sync! funan/reconciler :init))
+  (stm/broadcast-sync! :init))
 
 
-(defonce _ (add-watch funan/reconciler :debug #(pprint/pprint %4)))
+(defonce _ (add-watch stm/reconciler :debug #(pprint/pprint %4)))
 
 
 (after-load)
