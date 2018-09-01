@@ -17,10 +17,14 @@
   {:hello-world hello-world})
 
 
-(defn do-load-icon [rr _ xs]
-  (doseq [kw xs]
+(def icon-name-by-kw
+  {:home "home"})
+
+
+(defn do-load-icon [rr _ coll]
+  (doseq [[kw {:keys [size]}] (seq coll)]
     (-> Icon
-        (.getImageSource (name kw) 30)
+        (.getImageSource (icon-name-by-kw kw) size)
         (.then #(citrus/broadcast! rr :icon-loaded kw %1)))))
 
 

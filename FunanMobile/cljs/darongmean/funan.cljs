@@ -41,7 +41,7 @@
     (= :init event)
     {:state                 +init+
      :do-register-component {:hello-world (name (gensym))}
-     :do-load-icon          [:home]}
+     :do-load-icon          {:home {:size 30}}}
 
     (= :component-registered event)
     (let [[coll] args
