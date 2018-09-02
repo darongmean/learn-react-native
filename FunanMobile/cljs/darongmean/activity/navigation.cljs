@@ -13,12 +13,5 @@
 
 
 (defmethod activity/do-show-screen :default
-  [_ _ context]
-  (let [screen-key (:mode/screen context)
-        screen-name (get-in context [:screen screen-key :uid])
-        icon (get-in context [:icon :home])]
-    (doto Navigation
-      (.startTabBasedApp (clj->js {:tabs [{:screen screen-name
-                                           :title  "Home"
-                                           :label  "Home"
-                                           :icon   icon}]})))))
+  [_ _ coll]
+  (.startTabBasedApp Navigation (clj->js coll)))

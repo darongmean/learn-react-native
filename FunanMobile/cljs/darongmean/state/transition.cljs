@@ -7,10 +7,13 @@
     {:state state}))
 
 
-(defn goto-listing [state]
-  (let [st (assoc state :mode/screen :hello-world)]
-    {:state          st
-     :do-show-screen st}))
+(defn goto-listing [{:keys [screen icon] :as state}]
+  (let [nav-params {:tabs [{:screen (get-in screen [:listing :uid])
+                            :title  "Home"
+                            :label  "Home"
+                            :icon   (get-in icon [:home])}]}]
+    {:state          (assoc state :mode/screen :listing)
+     :do-show-screen nav-params}))
 
 
 (def goto-listing-when (partial guard goto-listing))

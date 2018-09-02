@@ -11,9 +11,9 @@
    :mode/icon      :init})
 
 
-(def +component+
-  {:hello-world {:uid           "darong.funan.hello-world"
-                 :rum-component listing/hello-world}})
+(def +screen+
+  {:listing {:uid           "listing"
+             :rum-component listing/screen}})
 
 
 (def +icon+
@@ -23,7 +23,7 @@
 (defmethod context/update-on :init
   [_]
   {:state                 +state+
-   :do-register-component +component+
+   :do-register-component +screen+
    :do-load-icon          +icon+})
 
 

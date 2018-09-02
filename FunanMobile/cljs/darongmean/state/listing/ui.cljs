@@ -4,7 +4,7 @@
     [rum.core :as rum]))
 
 
-(rum/defc hello-world []
+(rum/defc screen []
   (rn/text {:style {:font-size   30
                     :font-weight :bold}}
            "Hello, world!"))
