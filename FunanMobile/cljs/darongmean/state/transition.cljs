@@ -1,9 +1,16 @@
 (ns darongmean.state.transition)
 
 
-(defn goto-listing [state]
-  (if (= [:component/registered :icon/loaded]
-         [(:mode/component state) (:mode/icon state)])
-    (let [st (assoc state :mode/screen :hello-world)]
-      {:state st :do-show-screen st})
+(defn guard [f state pred]
+  (if (pred state)
+    (f state)
     {:state state}))
+
+
+(defn -goto-listing [state]
+  (let [st (assoc state :mode/screen :hello-world)]
+    {:state          st
+     :do-show-screen st}))
+
+
+(def goto-listing (partial guard -goto-listing))

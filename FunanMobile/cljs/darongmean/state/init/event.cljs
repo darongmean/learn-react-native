@@ -17,12 +17,17 @@
    :do-load-icon          {:home {:size 30}}})
 
 
+(defn initialized? [state]
+  (= [:component/registered :icon/loaded]
+     [(:mode/component state) (:mode/icon state)]))
+
+
 (defmethod context/update-on :component-registered
   [_ [coll] state]
   (-> state
       (assoc :mode/component :component/registered)
       (assoc :screen coll)
-      (transition/goto-listing)))
+      (transition/goto-listing initialized?)))
 
 
 (defmethod context/update-on :icon-loaded
@@ -30,5 +35,5 @@
   (-> state
       (assoc :mode/icon :icon/loaded)
       (assoc :icon coll)
-      (transition/goto-listing)))
+      (transition/goto-listing initialized?)))
 
