@@ -27,9 +27,8 @@
    :icon/get-image-source         +icon+})
 
 
-(defn initialized? [state]
-  (= [:registered :generated]
-     [(:mode/component state) (:mode/icon state)]))
+(defn initialized? [{:mode/keys [component icon]}]
+  (= [:registered :generated] [component icon]))
 
 
 (defmethod context/update-on :component-registered
