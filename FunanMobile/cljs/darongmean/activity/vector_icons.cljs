@@ -7,7 +7,7 @@
     ["react-native-vector-icons/Octicons" :as Icon]))
 
 
-(defn icon-chan [kw {:keys [name size]}]
+(defn icon-chan [[kw {:keys [name size]}]]
   (let [ch (async/chan)]
     (-> Icon
         (.getImageSource name size)
@@ -16,10 +16,9 @@
 
 
 (defmethod activity/get-image-source :default
-  [_ _ coll]
-  (let [icon-chans (map #(icon-chan %1 %2) coll)
-        as-hash-map #(->> % (async/map merge) (async/<!))]
-    (go
-      (->> icon-chans
-           (as-hash-map)
-           (stm/broadcast! :icon-generated)))))
+  [_ _ m]
+  (go (->> m
+           (map icon-chan)
+           (async/map merge)
+           (async/<!)
+           (stm/broadcast! :icon-generated))))
