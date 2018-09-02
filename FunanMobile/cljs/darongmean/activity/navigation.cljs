@@ -6,12 +6,12 @@
 
 
 (defmethod activity/register-component :default
-  [_ _ coll]
-  (doseq [[_ {:keys [uid rum-component]}] (seq coll)]
+  [_ _ m]
+  (doseq [[_ {:keys [uid rum-component]}] (seq m)]
     (.registerComponent Navigation uid (fn [] (:rum/class (meta rum-component)))))
-  (stm/broadcast! :component-registered coll))
+  (stm/broadcast! :component-registered m))
 
 
 (defmethod activity/start-tab-based-app :default
-  [_ _ coll]
-  (.startTabBasedApp Navigation (clj->js coll)))
+  [_ _ m]
+  (.startTabBasedApp Navigation (clj->js m)))

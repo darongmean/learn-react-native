@@ -33,17 +33,17 @@
 
 
 (defmethod context/update-on :component-registered
-  [_ [coll] state]
+  [_ [m] state]
   (-> state
       (assoc :mode/component :registered)
-      (assoc :screen coll)
+      (assoc :screen m)
       (transition/goto-listing-when initialized?)))
 
 
 (defmethod context/update-on :icon-generated
-  [_ [coll] state]
+  [_ [m] state]
   (-> state
       (assoc :mode/icon :generated)
-      (assoc :icon coll)
+      (assoc :icon m)
       (transition/goto-listing-when initialized?)))
 
