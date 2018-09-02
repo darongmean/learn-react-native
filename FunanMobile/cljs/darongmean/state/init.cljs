@@ -1,6 +1,7 @@
 (ns darongmean.state.init
   (:require
     [darongmean.context :as context]
+    [darongmean.state.listing.ui :as listing]
     [darongmean.state.transition :as transition]))
 
 
@@ -11,7 +12,8 @@
 
 
 (def +component+
-  {:hello-world {:uid "darong.funan.hello-world"}})
+  {:hello-world {:uid           "darong.funan.hello-world"
+                 :rum-component listing/hello-world}})
 
 
 (def +icon+

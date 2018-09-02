@@ -1,20 +1,14 @@
 (ns darongmean.activity.navigation
   (:require
     [darongmean.activity :as activity]
-    [darongmean.state.listing.ui :as listing]
     [darongmean.state-machine :as stm]
     ["react-native-navigation" :refer [Navigation]]))
 
 
-(def rum-by-keyword
-  {:hello-world listing/hello-world})
-
-
 (defmethod activity/do-register-component :default
   [_ _ coll]
-  (doseq [[kw {:keys [uid]}] (seq coll)
-          :let [comp-rum (rum-by-keyword kw)]]
-    (.registerComponent Navigation uid (fn [] (:rum/class (meta comp-rum)))))
+  (doseq [[_ {:keys [uid rum-component]}] (seq coll)]
+    (.registerComponent Navigation uid (fn [] (:rum/class (meta rum-component)))))
   (stm/broadcast! :component-registered coll))
 
 
