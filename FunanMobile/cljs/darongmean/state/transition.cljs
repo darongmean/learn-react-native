@@ -1,7 +1,7 @@
 (ns darongmean.state.transition)
 
 
-(defn show-screen [state]
+(defn goto-listing [state]
   (if (= [:component/registered :icon/loaded]
          [(:mode/component state) (:mode/icon state)])
     (let [st (assoc state :mode/screen :hello-world)]

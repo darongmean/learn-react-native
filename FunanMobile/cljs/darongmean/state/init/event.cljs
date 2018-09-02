@@ -22,7 +22,7 @@
   (-> state
       (assoc :mode/component :component/registered)
       (assoc :screen coll)
-      (transition/show-screen)))
+      (transition/goto-listing)))
 
 
 (defmethod context/update-on :icon-loaded
@@ -30,5 +30,5 @@
   (-> state
       (assoc :mode/icon :icon/loaded)
       (assoc :icon coll)
-      (transition/show-screen)))
+      (transition/goto-listing)))
 
