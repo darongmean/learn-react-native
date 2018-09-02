@@ -7,10 +7,10 @@
     {:state state}))
 
 
-(defn -goto-listing [state]
+(defn goto-listing [state]
   (let [st (assoc state :mode/screen :hello-world)]
     {:state          st
      :do-show-screen st}))
 
 
-(def goto-listing (partial guard -goto-listing))
+(def goto-listing-when (partial guard goto-listing))

@@ -1,4 +1,4 @@
-(ns darongmean.state.init.event
+(ns darongmean.state.init
   (:require
     [darongmean.context :as context]
     [darongmean.state.transition :as transition]))
@@ -35,7 +35,7 @@
   (-> state
       (assoc :mode/component :component/registered)
       (assoc :screen coll)
-      (transition/goto-listing initialized?)))
+      (transition/goto-listing-when initialized?)))
 
 
 (defmethod context/update-on :icon-loaded
@@ -43,5 +43,5 @@
   (-> state
       (assoc :mode/icon :icon/loaded)
       (assoc :icon coll)
-      (transition/goto-listing initialized?)))
+      (transition/goto-listing-when initialized?)))
 

@@ -2,7 +2,7 @@
   (:require
     [darongmean.activity.navigation]
     [darongmean.activity.vector-icons]
-    [darongmean.state.init.event]
+    [darongmean.state.init]
     [darongmean.state-machine :as stm]))
 
 
