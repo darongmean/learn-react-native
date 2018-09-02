@@ -1,20 +1,13 @@
 (ns darongmean.state.init.event
   (:require
-    [darongmean.context :as context]))
+    [darongmean.context :as context]
+    [darongmean.state.transition :as transition]))
 
 
 (def +init+
   {:mode/screen    :init
    :mode/component :init
    :mode/icon      :init})
-
-
-(defn show-screen [state]
-  (if (= [:component/registered :icon/loaded]
-         [(:mode/component state) (:mode/icon state)])
-    (let [st (assoc state :mode/screen :hello-world)]
-      {:state st :do-show-screen st})
-    {:state state}))
 
 
 (defmethod context/update-on :init
@@ -29,7 +22,7 @@
   (-> state
       (assoc :mode/component :component/registered)
       (assoc :screen coll)
-      (show-screen)))
+      (transition/show-screen)))
 
 
 (defmethod context/update-on :icon-loaded
@@ -37,5 +30,5 @@
   (-> state
       (assoc :mode/icon :icon/loaded)
       (assoc :icon coll)
-      (show-screen)))
+      (transition/show-screen)))
 
