@@ -17,7 +17,7 @@
 
 
 (def +icon+
-  {:home {:size 30}})
+  {:home {:name "home" :size 30}})
 
 
 (defmethod context/update-on :init

@@ -1,4 +1,5 @@
 (ns darongmean.activity.vector-icons
+  (:refer-clojure :exclude [name])
   (:require
     [cljs.core.async :as async :refer-macros [go]]
     [darongmean.activity :as activity]
@@ -6,26 +7,19 @@
     ["react-native-vector-icons/Octicons" :as Icon]))
 
 
-(def icon-name-by-kw
-  {:home "home"})
-
-
-(defn icon-chan [{:keys [kw icon-name size]}]
+(defn icon-chan [kw {:keys [name size]}]
   (let [ch (async/chan)]
     (-> Icon
-        (.getImageSource icon-name size)
+        (.getImageSource name size)
         (.then #(async/put! ch {kw %1})))
     ch))
 
 
 (defmethod activity/get-image-source :default
   [_ _ coll]
-  (let [icons (for [[kw options] (seq coll)
-                    :let [icon-name (icon-name-by-kw kw)
-                          params (-> options (assoc :kw kw) (assoc :icon-name icon-name))]]
-                (icon-chan params))]
+  (let [icon-chans (map #(icon-chan %1 %2) coll)
+        as-hash-map #(->> % (async/map merge) (async/<!))]
     (go
-      (->> icons
-           (async/map merge)
-           (async/<!)
+      (->> icon-chans
+           (as-hash-map)
            (stm/broadcast! :icon-generated)))))
