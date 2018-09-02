@@ -4,17 +4,25 @@
     [darongmean.state.transition :as transition]))
 
 
-(def +init+
+(def +state+
   {:mode/screen    :init
    :mode/component :init
    :mode/icon      :init})
 
 
+(def +component+
+  {:hello-world {:uid "darong.funan.hello-world"}})
+
+
+(def +icon+
+  {:home {:size 30}})
+
+
 (defmethod context/update-on :init
   [_]
-  {:state                 +init+
-   :do-register-component {:hello-world {:uid "darong.funan.hello-world"}}
-   :do-load-icon          {:home {:size 30}}})
+  {:state                 +state+
+   :do-register-component +component+
+   :do-load-icon          +icon+})
 
 
 (defn initialized? [state]
