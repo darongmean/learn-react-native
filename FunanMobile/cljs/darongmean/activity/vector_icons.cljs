@@ -18,7 +18,7 @@
     ch))
 
 
-(defmethod activity/do-load-icon :default
+(defmethod activity/get-image-source :default
   [_ _ coll]
   (let [icons (for [[kw options] (seq coll)
                     :let [icon-name (icon-name-by-kw kw)
@@ -28,4 +28,4 @@
       (->> icons
            (async/map merge)
            (async/<!)
-           (stm/broadcast! :icon-loaded)))))
+           (stm/broadcast! :icon-generated)))))

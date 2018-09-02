@@ -22,28 +22,28 @@
 
 (defmethod context/update-on :init
   [_]
-  {:state                 +state+
-   :do-register-component +screen+
-   :do-load-icon          +icon+})
+  {:state                         +state+
+   :navigation/register-component +screen+
+   :icon/get-image-source         +icon+})
 
 
 (defn initialized? [state]
-  (= [:component/registered :icon/loaded]
+  (= [:registered :generated]
      [(:mode/component state) (:mode/icon state)]))
 
 
 (defmethod context/update-on :component-registered
   [_ [coll] state]
   (-> state
-      (assoc :mode/component :component/registered)
+      (assoc :mode/component :registered)
       (assoc :screen coll)
       (transition/goto-listing-when initialized?)))
 
 
-(defmethod context/update-on :icon-loaded
+(defmethod context/update-on :icon-generated
   [_ [coll] state]
   (-> state
-      (assoc :mode/icon :icon/loaded)
+      (assoc :mode/icon :generated)
       (assoc :icon coll)
       (transition/goto-listing-when initialized?)))
 

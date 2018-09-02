@@ -12,8 +12,8 @@
                             :title  "Home"
                             :label  "Home"
                             :icon   (get-in icon [:home])}]}]
-    {:state          (assoc state :mode/screen :listing)
-     :do-show-screen nav-params}))
+    {:state                          (assoc state :mode/screen :listing)
+     :navigation/start-tab-based-app nav-params}))
 
 
 (def goto-listing-when (partial guard goto-listing))
