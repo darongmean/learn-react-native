@@ -11,6 +11,3 @@
 
 (defn main []
   (stm/broadcast-sync! :init))
-
-
-(defonce _ (main))
