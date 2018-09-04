@@ -1,7 +1,7 @@
 (ns darongmean.funan
   (:require
-    [darongmean.activity.navigation]
-    [darongmean.activity.vector-icons]
+    [darongmean.rn.navigation]
+    [darongmean.rn.vector-icons]
     [darongmean.state.init]
     [darongmean.state-machine :as stm]))
 

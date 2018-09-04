@@ -1,4 +1,4 @@
-(ns darongmean.activity.vector-icons
+(ns darongmean.rn.vector-icons
   (:refer-clojure :exclude [name])
   (:require
     [cljs.core.async :as async :refer-macros [go]]

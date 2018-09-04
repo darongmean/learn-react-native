@@ -1,4 +1,4 @@
-(ns darongmean.activity.navigation
+(ns darongmean.rn.navigation
   (:require
     [darongmean.activity :as activity]
     [darongmean.state-machine :as stm]

@@ -12,9 +12,9 @@
   (citrus/reconciler
     {:state           *app
      :controllers     {:context context/update-on}
-     :effect-handlers {:icon/get-image-source          activity/get-image-source
-                       :navigation/register-component  activity/register-component
-                       :navigation/start-tab-based-app activity/start-tab-based-app}}))
+     :effect-handlers {:rn.icon/get-image-source          activity/get-image-source
+                       :rn.navigation/register-component  activity/register-component
+                       :rn.navigation/start-tab-based-app activity/start-tab-based-app}}))
 
 
 ;;; --------------- Subscription functions
