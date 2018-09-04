@@ -2,17 +2,17 @@
   (:require
     [cljs.pprint :as pprint]
     [darongmean.funan :as funan]
-    [darongmean.state-machine :as stm]))
+    [darongmean.shell :as shell]))
 
 
-(defonce _ (add-watch stm/reconciler :debug #(pprint/pprint %4)))
+(defonce _ (add-watch funan/reconciler :debug #(pprint/pprint %4)))
 
 
 (defonce _ (funan/main))
 
 
 (defn after-load []
-  (stm/broadcast-sync! :init))
+  "debugging")
 
 
 (after-load)

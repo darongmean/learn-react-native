@@ -1,6 +1,6 @@
 (ns darongmean.state.init
   (:require
-    [darongmean.context :as context]
+    [darongmean.shell :as shell]
     [darongmean.state.listing.ui :as listing]
     [darongmean.state.transition :as transition]))
 
@@ -20,18 +20,18 @@
   {:home {:name "home" :size 30}})
 
 
-(defmethod context/update-on :init
+(defmethod shell/update-context :init
   [_]
-  {:state                            +state+
-   :rn.navigation/register-component +screen+
-   :rn.icon/get-image-source         +icon+})
+  {:state                     +state+
+   :rn.nav/register-component +screen+
+   :rn.icon/get-image-source  +icon+})
 
 
 (defn initialized? [{:mode/keys [component icon]}]
   (= [:registered :generated] [component icon]))
 
 
-(defmethod context/update-on :component-registered
+(defmethod shell/update-context :component-registered
   [_ [m] state]
   (-> state
       (assoc :mode/component :registered)
@@ -39,7 +39,7 @@
       (transition/goto-listing-when initialized?)))
 
 
-(defmethod context/update-on :icon-generated
+(defmethod shell/update-context :icon-generated
   [_ [m] state]
   (-> state
       (assoc :mode/icon :generated)

@@ -2,8 +2,7 @@
   (:refer-clojure :exclude [name])
   (:require
     [cljs.core.async :as async :refer-macros [go]]
-    [darongmean.activity :as activity]
-    [darongmean.state-machine :as stm]
+    [darongmean.shell :as shell]
     ["react-native-vector-icons/Octicons" :as Icon]))
 
 
@@ -15,10 +14,9 @@
     ch))
 
 
-(defmethod activity/get-image-source :default
-  [_ _ m]
+(defn get-image-source [_ _ m]
   (go (->> m
            (map icon-chan)
            (async/map merge)
            (async/<!)
-           (stm/broadcast! :icon-generated))))
+           (shell/broadcast! :icon-generated))))
