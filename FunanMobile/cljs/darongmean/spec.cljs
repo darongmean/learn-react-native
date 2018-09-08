@@ -46,9 +46,19 @@
   (s/keys :req-un [:rnn/tabs]))
 
 
+;;; ------------ React Native Vector Icons
+(s/def :rni/name string?)
+(s/def :rni/size pos-int?)
+(s/def
+  :rn.icon/get-image-source
+  (s/map-of keyword?
+            (s/keys :req-un [:rni/name :rni/size])))
+
+
 ;;; ------------ Citrus
 (s/def
   :citrus/context
   (s/keys :req-un [:citrus/state]
           :opt [:rn.nav/register-component
-                :rn.nav/start-tab-based-app]))
+                :rn.nav/start-tab-based-app
+                :rn.icon/get-image-source]))
