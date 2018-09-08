@@ -7,15 +7,21 @@
     {:state state}))
 
 
-(defn goto-listing [{:keys [layout icon] :as state}]
-  (let [listing-layout {:screen (get-in layout [:listing :screen])
+(defn update-layout-mode [state kw]
+  (assoc state :mode/layout kw))
+
+
+(defn listing-layout-tabs [{{screen :screen} :listing} {:keys [home]}]
+  (let [listing-layout {:screen screen
                         :title  "Home"
                         :label  "Home"
-                        :icon   (get-in icon [:home])}
-        nav-params {:tabs [listing-layout]}
-        listing-layout-mode (assoc state :mode/screen :listing)]
-    {:state               listing-layout-mode
-     :start-tab-based-app nav-params}))
+                        :icon   home}]
+    {:tabs [listing-layout]}))
+
+
+(defn goto-listing [{:keys [layout icon] :as state}]
+  {:state               (update-layout-mode state :listing)
+   :start-tab-based-app (listing-layout-tabs layout icon)})
 
 
 (def goto-listing-when (partial guard goto-listing))

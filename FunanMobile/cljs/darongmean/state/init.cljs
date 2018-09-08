@@ -6,8 +6,7 @@
 
 
 (def +state+
-  {:mode/screen :init
-   :mode/layout :init
+  {:mode/layout :init
    :mode/icon   :init})
 
 
