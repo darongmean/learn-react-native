@@ -19,7 +19,7 @@
   "A work around to run clojure.spec because
   `spec` can't apply to anonymous function maintained by Citrus."
   [event ctrl args]
-  {:post [(s/assert :funan/context %)]}
+  {:post [(s/assert :citrus/context %)]}
   (shell/update-context event ctrl args))
 
 

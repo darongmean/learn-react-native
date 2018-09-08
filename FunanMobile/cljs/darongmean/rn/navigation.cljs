@@ -13,4 +13,5 @@
 
 
 (defn start-tab-based-app [_ _ m]
+  {:pre [(s/assert :rn.nav/start-tab-based-app m)]}
   (.startTabBasedApp Navigation (clj->js m)))
