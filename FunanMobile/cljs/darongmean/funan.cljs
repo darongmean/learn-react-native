@@ -27,9 +27,9 @@
   (citrus/reconciler
     {:state           *app
      :controllers     {:context update-context}
-     :effect-handlers {:rn.icon/get-image-source   rni/get-image-source
-                       :rn.nav/register-component  rnn/register-component
-                       :rn.nav/start-tab-based-app rnn/start-tab-based-app}}))
+     :effect-handlers {:get-image-source    rni/get-image-source
+                       :register-component  rnn/register-component
+                       :start-tab-based-app rnn/start-tab-based-app}}))
 
 
 ;;; --------------- Subscription functions

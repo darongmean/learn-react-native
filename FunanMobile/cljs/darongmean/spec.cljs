@@ -6,18 +6,15 @@
 
 ;;; ----------- React Native Navigation
 (s/def :rnn/uid string?)
-
 (s/def :rnn/rum-component #(-> % (meta) (:rum/class)))
-
 (s/def
-  :rn.nav/register-component
+  :rnn/register-component
   (s/map-of keyword?
             (s/keys :req-un [:rnn/uid :rnn/rum-component])))
 
 
 ; TODO: use only one?
 (s/def :rnn/screen :rnn/uid)
-
 (s/def :rnn/icon object?)
 (s/def :rnn/icon-insets map?)
 (s/def :rnn/label string?)
@@ -26,7 +23,6 @@
 (s/def :rnn/selected-icon :rnn/icon)
 (s/def :rnn/title string?)
 (s/def :rnn/title-image object?)
-
 (s/def
   :rnn/tab
   (s/keys :req-un [:rnn/screen]
@@ -38,11 +34,9 @@
                    :rnn/selected-icon
                    :rnn/title
                    :rnn/title-image]))
-
 (s/def :rnn/tabs (s/coll-of :rnn/tab :into []))
-
 (s/def
-  :rn.nav/start-tab-based-app
+  :rnn/start-tab-based-app
   (s/keys :req-un [:rnn/tabs]))
 
 
@@ -50,7 +44,7 @@
 (s/def :rni/name string?)
 (s/def :rni/size pos-int?)
 (s/def
-  :rn.icon/get-image-source
+  :rni/get-image-source
   (s/map-of keyword?
             (s/keys :req-un [:rni/name :rni/size])))
 
@@ -59,6 +53,6 @@
 (s/def
   :citrus/context
   (s/keys :req-un [:citrus/state]
-          :opt [:rn.nav/register-component
-                :rn.nav/start-tab-based-app
-                :rn.icon/get-image-source]))
+          :opt-un [:rni/get-image-source
+                   :rnn/register-component
+                   :rnn/start-tab-based-app]))

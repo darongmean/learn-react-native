@@ -22,9 +22,9 @@
 
 (defmethod shell/update-context :init
   [_]
-  {:state                     +state+
-   :rn.nav/register-component +screen+
-   :rn.icon/get-image-source  +icon+})
+  {:state              +state+
+   :register-component +screen+
+   :get-image-source   +icon+})
 
 
 (defn initialized? [{:mode/keys [component icon]}]

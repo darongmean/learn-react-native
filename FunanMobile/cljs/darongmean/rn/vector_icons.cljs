@@ -16,7 +16,7 @@
 
 
 (defn get-image-source [_ _ m]
-  {:pre [(s/assert :rn.icon/get-image-source m)]}
+  {:pre [(s/assert :rni/get-image-source m)]}
   (go (->> m
            (map icon-chan)
            (async/map merge)
