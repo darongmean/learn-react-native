@@ -7,6 +7,7 @@
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :source-paths ["cljs" "rum-native"]
   :dependencies [[expound "0.7.1"]
+                 [orchestra "2018.08.19-1"]
                  [org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.10.238"]
                  [rum "0.11.2"]
