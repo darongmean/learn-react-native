@@ -21,4 +21,4 @@
            (map icon-chan)
            (async/map merge)
            (async/<!)
-           (shell/broadcast! :icon-generated))))
+           (shell/broadcast! :icon-initialized))))

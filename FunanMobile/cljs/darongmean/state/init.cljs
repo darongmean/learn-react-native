@@ -27,21 +27,21 @@
 
 
 (defn initialized? [{:mode/keys [layout icon]}]
-  (= [:registered :generated] [layout icon]))
+  (= [:initialized :initialized] [layout icon]))
 
 
-(defmethod shell/update-context :layout-registered
+(defmethod shell/update-context :layout-initialized
   [_ [m] state]
   (-> state
-      (assoc :mode/layout :registered)
+      (assoc :mode/layout :initialized)
       (assoc :layout m)
       (transition/goto-listing-when initialized?)))
 
 
-(defmethod shell/update-context :icon-generated
+(defmethod shell/update-context :icon-initialized
   [_ [m] state]
   (-> state
-      (assoc :mode/icon :generated)
+      (assoc :mode/icon :initialized)
       (assoc :icon m)
       (transition/goto-listing-when initialized?)))
 

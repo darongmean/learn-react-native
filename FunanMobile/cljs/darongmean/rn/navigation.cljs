@@ -9,7 +9,7 @@
   {:pre [(s/assert :rnn/register-component m)]}
   (doseq [[_ {:keys [screen rum-component]}] (seq m)]
     (.registerComponent Navigation screen (fn [] (:rum/class (meta rum-component)))))
-  (shell/broadcast! :layout-registered m))
+  (shell/broadcast! :layout-initialized m))
 
 
 (defn start-tab-based-app [_ _ m]
