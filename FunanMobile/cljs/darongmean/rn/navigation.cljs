@@ -7,9 +7,9 @@
 
 (defn register-component [_ _ m]
   {:pre [(s/assert :rnn/register-component m)]}
-  (doseq [[_ {:keys [uid rum-component]}] (seq m)]
-    (.registerComponent Navigation uid (fn [] (:rum/class (meta rum-component)))))
-  (shell/broadcast! :component-registered m))
+  (doseq [[_ {:keys [screen rum-component]}] (seq m)]
+    (.registerComponent Navigation screen (fn [] (:rum/class (meta rum-component)))))
+  (shell/broadcast! :layout-registered m))
 
 
 (defn start-tab-based-app [_ _ m]

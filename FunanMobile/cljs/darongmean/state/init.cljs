@@ -6,9 +6,9 @@
 
 
 (def +state+
-  {:mode/screen    :init
-   :mode/component :init
-   :mode/icon      :init})
+  {:mode/screen :init
+   :mode/layout :init
+   :mode/icon   :init})
 
 
 (def +screen+
@@ -27,15 +27,15 @@
    :get-image-source   +icon+})
 
 
-(defn initialized? [{:mode/keys [component icon]}]
-  (= [:registered :generated] [component icon]))
+(defn initialized? [{:mode/keys [layout icon]}]
+  (= [:registered :generated] [layout icon]))
 
 
-(defmethod shell/update-context :component-registered
+(defmethod shell/update-context :layout-registered
   [_ [m] state]
   (-> state
-      (assoc :mode/component :registered)
-      (assoc :screen m)
+      (assoc :mode/layout :registered)
+      (assoc :layout m)
       (transition/goto-listing-when initialized?)))
 
 
