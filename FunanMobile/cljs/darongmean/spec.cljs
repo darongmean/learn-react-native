@@ -5,16 +5,14 @@
 
 
 ;;; ----------- React Native Navigation
-(s/def :rnn/uid string?)
+(s/def :rnn/screen string?)
 (s/def :rnn/rum-component #(-> % (meta) (:rum/class)))
 (s/def
   :rnn/register-component
   (s/map-of keyword?
-            (s/keys :req-un [:rnn/uid :rnn/rum-component])))
+            (s/keys :req-un [:rnn/screen :rnn/rum-component])))
 
 
-; TODO: use only one?
-(s/def :rnn/screen :rnn/uid)
 (s/def :rnn/icon object?)
 (s/def :rnn/icon-insets map?)
 (s/def :rnn/label string?)

@@ -12,7 +12,7 @@
 
 
 (def +screen+
-  {:listing {:uid           "listing"
+  {:listing {:screen        "listing"
              :rum-component listing/screen}})
 
 

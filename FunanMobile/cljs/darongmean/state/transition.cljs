@@ -8,7 +8,7 @@
 
 
 (defn goto-listing [{:keys [screen icon] :as state}]
-  (let [nav-params {:tabs [{:screen (get-in screen [:listing :uid])
+  (let [nav-params {:tabs [{:screen (get-in screen [:listing :screen])
                             :title  "Home"
                             :label  "Home"
                             :icon   (get-in icon [:home])}]}]
