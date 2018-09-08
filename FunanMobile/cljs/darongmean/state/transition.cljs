@@ -11,17 +11,22 @@
   (assoc state :mode/layout kw))
 
 
-(defn listing-layout-tabs [{{screen :screen} :listing} {:keys [home]}]
-  (let [listing-layout {:screen screen
-                        :title  "Home"
-                        :label  "Home"
-                        :icon   home}]
-    {:tabs [listing-layout]}))
+(defn as-tab-with-icon [state kw]
+  (let [{:keys [icon-ks] :as m} (get-in state [:layout kw])
+        icon (get-in state icon-ks)]
+    (-> m
+        (assoc-in [:icon] icon)
+        (dissoc :rum-component))))
 
 
-(defn goto-listing [{:keys [layout icon] :as state}]
+(defn listing-mode-tabs [state]
+  (let [listing-tab (as-tab-with-icon state :listing)]
+    {:tabs [listing-tab]}))
+
+
+(defn goto-listing [state]
   {:state               (update-layout-mode state :listing)
-   :start-tab-based-app (listing-layout-tabs layout icon)})
+   :start-tab-based-app (listing-mode-tabs state)})
 
 
 (def goto-listing-when (partial guard goto-listing))

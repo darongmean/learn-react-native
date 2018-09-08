@@ -4,26 +4,36 @@
     [cljs.spec.alpha :as s]))
 
 
+;;; ----------- Unique ID
+(s/def :uid/icon keyword?)
+(s/def :uid/icon-ks (s/cat :icon-kw #{:icon} :uid :uid/icon))
+
+(s/def :uid/screen string?)
+
+
 ;;; ----------- React Native Navigation
-(s/def :rnn/screen string?)
+(s/def :rnn/label string?)
 (s/def :rnn/rum-component #(-> % (meta) (:rum/class)))
+(s/def :rnn/title string?)
 (s/def
   :rnn/register-component
   (s/map-of keyword?
-            (s/keys :req-un [:rnn/screen :rnn/rum-component])))
+            (s/keys :req-un [:uid/icon-ks
+                             :rnn/label
+                             :rnn/rum-component
+                             :uid/screen
+                             :rnn/title])))
 
 
 (s/def :rnn/icon object?)
 (s/def :rnn/icon-insets map?)
-(s/def :rnn/label string?)
 (s/def :rnn/navigator-buttons map?)
 (s/def :rnn/navigator-style map?)
 (s/def :rnn/selected-icon :rnn/icon)
-(s/def :rnn/title string?)
 (s/def :rnn/title-image object?)
 (s/def
   :rnn/tab
-  (s/keys :req-un [:rnn/screen]
+  (s/keys :req-un [:uid/screen]
           :opt-un [:rnn/icon
                    :rnn/icon-insets
                    :rnn/label
@@ -43,7 +53,7 @@
 (s/def :rni/size pos-int?)
 (s/def
   :rni/get-image-source
-  (s/map-of keyword?
+  (s/map-of :uid/icon
             (s/keys :req-un [:rni/name :rni/size])))
 
 

@@ -11,8 +11,11 @@
 
 
 (def +screen+
-  {:listing {:screen        "listing"
-             :rum-component listing/screen}})
+  {:listing {:icon-ks       [:icon :home]
+             :label         "Home"
+             :rum-component listing/screen
+             :screen        "listing"
+             :title         "Screen Home"}})
 
 
 (def +icon+
