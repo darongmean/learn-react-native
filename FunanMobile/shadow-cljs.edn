@@ -2,9 +2,11 @@
  ["cljs" "rum-native"]
 
  :dependencies
- [[rum "0.11.2"]
+ [[expound "0.7.1"]
+  [org.clojure/core.async "0.4.474"]
+  [org.clojure/test.check "0.9.0"]
   [org.roman01la/citrus "3.1.0"]
-  [org.clojure/core.async "0.4.474"]]
+  [rum "0.11.2"]]
 
  :builds
  {:app {:target     :npm-module

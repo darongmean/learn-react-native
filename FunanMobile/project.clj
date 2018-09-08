@@ -6,8 +6,10 @@
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :source-paths ["cljs" "rum-native"]
-  :dependencies [[org.clojure/clojure "1.9.0"]
+  :dependencies [[expound "0.7.1"]
+                 [org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.10.238"]
                  [rum "0.11.2"]
                  [org.roman01la/citrus "3.1.0"]
-                 [org.clojure/core.async "0.4.474"]])
+                 [org.clojure/core.async "0.4.474"]
+                 [org.clojure/test.check "0.9.0"]])
