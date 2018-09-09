@@ -9,16 +9,24 @@
     [orchestra-cljs.spec.test :as stest]))
 
 
-(defonce _ (add-watch funan/reconciler :debug #(pprint/pprint %4)))
-
 (set! s/*explain-out* expound/printer)
 
 
-(defn after-load []
-  ; activate clojure.spec
+(defn refresh-clojure-spec []
   (stest/unstrument)
   (s/check-asserts true)
-  (stest/instrument)
+  (stest/instrument))
+
+
+(defonce run-once
+  (do
+    (refresh-clojure-spec)
+    (add-watch funan/reconciler :debug #(pprint/pprint %4))
+    (funan/main)))
+
+
+(defn after-load []
+  (refresh-clojure-spec)
   ; do some testing
   (shell/broadcast-sync! :init)
   "debugging")
