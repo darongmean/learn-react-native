@@ -9,7 +9,7 @@
 
 (rum/defc Screen < rum/reactive []
   (row/View {:dial 5}
-            (rn/text {:style {:font-size   30
+            (rn/Text {:style {:font-size   30
                               :font-weight :bold}}
-              (rum/react (shell/hello-world)))
+                     (rum/react (shell/hello-world)))
             (uikit/RkButton {} "Click Me!")))
