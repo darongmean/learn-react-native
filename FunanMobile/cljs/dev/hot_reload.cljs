@@ -28,7 +28,8 @@
 (defn after-load []
   (refresh-clojure-spec)
   ; do some testing
-  (shell/broadcast-sync! :init)
+  ;(shell/broadcast-sync! :init)
+  ;(swap! funan/*app assoc-in [:hello] " cde")
   "debugging")
 
 

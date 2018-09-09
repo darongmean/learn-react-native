@@ -33,6 +33,9 @@
 
 
 ;;; --------------- Subscription functions
+(defmethod shell/hello-world :citrus
+  [_]
+  (citrus/subscription reconciler [:mode/layout] (fn [_] "Hello Citrus!")))
 
 
 
