@@ -5,7 +5,7 @@
     [rum.core :as rum]))
 
 
-(rum/defc screen < rum/reactive []
+(rum/defc Screen < rum/reactive []
   (rn/text {:style {:font-size   30
                     :font-weight :bold}}
            (rum/react (shell/hello-world))))
