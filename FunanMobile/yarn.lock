@@ -4590,6 +4590,10 @@ react-is@^16.3.1:
   version "16.3.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.3.2.tgz#f4d3d0e2f5fbb6ac46450641eb2e25bf05d36b22"
 
+react-native-fast-image@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-5.0.3.tgz#cb53b70a904d908c2c531dcc3d4a77834c9e1c63"
+
 react-native-navigation@^1.1.446:
   version "1.1.446"
   resolved "https://registry.yarnpkg.com/react-native-navigation/-/react-native-navigation-1.1.446.tgz#ecf577fa8679443868dc6409d18c4028d51b0198"
