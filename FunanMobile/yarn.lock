@@ -4596,6 +4596,10 @@ react-native-navigation@^1.1.446:
   dependencies:
     lodash "4.x.x"
 
+react-native-row@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-row/-/react-native-row-1.1.1.tgz#1c094c18930db093cd18f01dbf9b41e63ae5d280"
+
 react-native-ui-kitten@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/react-native-ui-kitten/-/react-native-ui-kitten-3.0.1.tgz#b0d3f7f5cee4144e629d6506267b44c03b535801"
