@@ -1,6 +1,7 @@
 (ns darongmean.state.listing.ui
   (:require
     [darongmean.rn.fast-image :as image]
+    [darongmean.rn.paper :as paper]
     [darongmean.rn.row :as row]
     [darongmean.shell :as shell]
     [react-native.core :as rn]
@@ -8,10 +9,12 @@
 
 
 (rum/defc Screen < rum/reactive []
-  (row/View {:dial 5}
-    (rn/Text {:style {:font-size 30 :font-weight :bold}}
-      (rum/react (shell/hello-world)))
-    (image/FastImage {:style       {:width 200 :height 200}
-                      :source      {:uri "https://unsplash.it/400/400?image=1"}
-                      :priority    image/priority-normal
-                      :resize-mode image/resize-mode-contain})))
+  (paper/Provider {}
+    (paper/Card {}
+      (paper/CardContent {}
+        (paper/Title {} (rum/react (shell/hello-world)))
+        (paper/Paragraph {} "Card Content"))
+      (paper/CardCover {:source {:uri "https://picsum.photos/700"}})
+      (paper/CardActions {}
+        (paper/Button {} "Cancel")
+        (paper/Button {} "OK")))))
