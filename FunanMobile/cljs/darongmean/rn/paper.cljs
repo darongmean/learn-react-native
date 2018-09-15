@@ -15,4 +15,8 @@
 
 (def Provider (rn/react->rum rnp/Provider))
 
+(def Subheading (rn/react->rum rnp/Subheading))
+
+(def Text (rn/react->rum rnp/Text))
+
 (def Title (rn/react->rum rnp/Title))
